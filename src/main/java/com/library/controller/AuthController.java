@@ -1,0 +1,46 @@
+package com.library.controller;
+
+import com.library.dto.LoginRequest;
+import com.library.dto.RegisterRequest;
+import com.library.dto.UserResponse;
+import com.library.model.User;
+import com.library.service.AuthService;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/auth")
+public class AuthController {
+
+    private final AuthService authService;
+
+    public AuthController(AuthService authService) {
+        this.authService = authService;
+    }
+
+    @PostMapping("/register")
+    public UserResponse register(@RequestBody RegisterRequest request) {
+
+        User user = authService.registerNewUser(request);
+
+        return new UserResponse(
+                user.getId(),
+                user.getName(),
+                user.getEmail()
+        );
+    }
+
+    @PostMapping("/login")
+    public UserResponse login(@RequestBody LoginRequest request) {
+
+        User user = authService.login(request);
+
+        return new UserResponse(
+                user.getId(),
+                user.getName(),
+                user.getEmail()
+        );
+    }
+}
