@@ -5,10 +5,14 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.List;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -49,7 +53,24 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-        // token valid → كمّل request
+       // extract data from token
+        String role = jwtService.extractRole(token);
+        Long id= jwtService.extractId(token);
+
+      // create authenticated user object
+        UsernamePasswordAuthenticationToken authentication =
+                new UsernamePasswordAuthenticationToken(
+                        id,
+                        null,
+                        List.of(new SimpleGrantedAuthority(role))
+                );
+
+       // store authenticated user in Spring Security
+        SecurityContextHolder
+                .getContext()
+                .setAuthentication(authentication);
+
+       // continue request
         filterChain.doFilter(request, response);
     }
 }

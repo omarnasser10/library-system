@@ -4,6 +4,8 @@ import com.library.dto.UpdateUserRequest;
 import com.library.dto.UserResponse;
 import com.library.model.User;
 import com.library.service.UserService;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +19,7 @@ public class UserController {
         this.userService = userService;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public List<UserResponse> getAllUsers(){
         List<User> users=userService.getAllUsers();
@@ -29,18 +32,25 @@ public class UserController {
         ).toList();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}")
     public UserResponse getUserById(@PathVariable Long id){
         User user=userService.getUserById(id);
         return new UserResponse(user.getId(),user.getName(),user.getEmail());
     }
 
-    @PatchMapping("/{id}")
-    public UserResponse updateUser(@PathVariable Long id,@RequestBody UpdateUserRequest request){
-        User user=userService.updateProfile(id, request.getPassword(),request.getName(),request.getEmail());
+    @PatchMapping("/me")
+    public UserResponse updateUser(@RequestBody UpdateUserRequest request){
+        Long userId =
+                (Long) SecurityContextHolder
+                        .getContext()
+                        .getAuthentication()
+                        .getPrincipal();
+        User user=userService.updateProfile(userId, request.getPassword(),request.getName(),request.getEmail());
         return new UserResponse(user.getId(),user.getName(),user.getEmail());
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable Long id){
         userService.deleteUser(id);

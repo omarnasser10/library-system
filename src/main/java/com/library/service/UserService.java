@@ -2,6 +2,8 @@ package com.library.service;
 
 import com.library.repository.UserRepository;
 import com.library.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -9,9 +11,12 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final BCryptPasswordEncoder bcy;
 
-    public UserService(UserRepository userRepository) {
+    @Autowired
+    public UserService(UserRepository userRepository, BCryptPasswordEncoder bcy) {
         this.userRepository = userRepository;
+        this.bcy = bcy;
     }
 
     public User viewProfile(Long userId) {
@@ -34,7 +39,7 @@ public class UserService {
         }
 
         if (newPassword != null && !newPassword.equals(user.getPassword()))
-            user.setPassword(newPassword);
+            user.setPassword(bcy.encode(newPassword));
 
         return userRepository.save(user);
     }

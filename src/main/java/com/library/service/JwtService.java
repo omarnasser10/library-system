@@ -35,13 +35,6 @@ public class JwtService {
     }
 
     // =========================
-    // Extract Email
-    // =========================
-    public String extractEmail(String token) {
-        return extractAllClaims(token).getSubject();
-    }
-
-    // =========================
     // Extract Role
     // =========================
     public String extractRole(String token) {
