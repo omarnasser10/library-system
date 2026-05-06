@@ -1,6 +1,7 @@
 package com.library.controller;
 
 import com.library.dto.LoginRequest;
+import com.library.dto.LoginResponse;
 import com.library.dto.RegisterRequest;
 import com.library.dto.UserResponse;
 import com.library.model.User;
@@ -33,14 +34,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public UserResponse login(@RequestBody LoginRequest request) {
-
-        User user = authService.login(request);
-
-        return new UserResponse(
-                user.getId(),
-                user.getName(),
-                user.getEmail()
-        );
+    public LoginResponse login(@RequestBody LoginRequest request) {
+        return authService.login(request);
     }
 }
