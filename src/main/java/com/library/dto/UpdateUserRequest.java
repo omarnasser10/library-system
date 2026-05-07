@@ -1,18 +1,26 @@
 package com.library.dto;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Size;
+
 public class UpdateUserRequest {
 
-    private String password;
+    @Size(min = 3, message = "Name must be at least 3 characters")
     private String name;
+
+    @Email(message = "Invalid email format")
     private String email;
+
+    @Size(min = 8, message = "Password must be at least 8 characters")
+    private String password;
+
+    public UpdateUserRequest() {}
 
     public UpdateUserRequest(String password, String name, String email) {
         this.password = password;
         this.name = name;
         this.email = email;
     }
-
-    public UpdateUserRequest() {}
 
     public String getPassword() {
         return password;

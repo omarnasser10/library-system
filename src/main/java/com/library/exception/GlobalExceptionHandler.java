@@ -55,4 +55,21 @@ public class GlobalExceptionHandler {
                 HttpStatus.BAD_REQUEST
         );
     }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleUserNotFound(
+            UserNotFoundException ex){
+
+        ErrorResponse response =
+                new ErrorResponse(
+                        ex.getMessage(),
+                        404,
+                        LocalDateTime.now()
+                );
+
+        return new ResponseEntity<>(
+                response,
+                HttpStatus.NOT_FOUND
+        );
+    }
 }

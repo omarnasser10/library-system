@@ -4,6 +4,7 @@ import com.library.dto.UpdateUserRequest;
 import com.library.dto.UserResponse;
 import com.library.model.User;
 import com.library.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -40,7 +41,7 @@ public class UserController {
     }
 
     @PatchMapping("/me")
-    public UserResponse updateUser(@RequestBody UpdateUserRequest request){
+    public UserResponse updateUser( @Valid @RequestBody UpdateUserRequest request){
         Long userId =
                 (Long) SecurityContextHolder
                         .getContext()

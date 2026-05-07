@@ -1,5 +1,7 @@
 package com.library.service;
 
+import com.library.exception.EmailAlreadyExistsException;
+import com.library.exception.UserNotFoundException;
 import com.library.repository.UserRepository;
 import com.library.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,21 +27,37 @@ public class UserService {
     }
 
 
-    public User updateProfile(Long userId,String newPassword,String newName,String newEmail){
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+    public User updateProfile(
+            Long userId,
+            String newPassword,
+            String newName,
+            String newEmail){
 
-        if (newName != null && !newName.equals(user.getName()))
+        User user = userRepository.findById(userId)
+                .orElseThrow(() ->
+                        new UserNotFoundException("User not found"));
+
+        if (newName != null && !newName.isBlank()) {
             user.setName(newName);
+        }
 
         if (newEmail != null && !newEmail.equals(user.getEmail())) {
-            if (userRepository.existsByEmail(newEmail))
-                throw new RuntimeException("Email already exists");
+
+            if (userRepository.existsByEmail(newEmail)) {
+                throw new EmailAlreadyExistsException(
+                        "Email already exists"
+                );
+            }
+
             user.setEmail(newEmail);
         }
 
-        if (newPassword != null && !newPassword.equals(user.getPassword()))
-            user.setPassword(bcy.encode(newPassword));
+        if (newPassword != null && !newPassword.isBlank()) {
+
+            user.setPassword(
+                    bcy.encode(newPassword)
+            );
+        }
 
         return userRepository.save(user);
     }
