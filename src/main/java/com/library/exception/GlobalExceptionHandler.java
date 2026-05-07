@@ -72,4 +72,38 @@ public class GlobalExceptionHandler {
                 HttpStatus.NOT_FOUND
         );
     }
+
+    @ExceptionHandler(BookNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleBookNotFound(
+            BookNotFoundException ex){
+
+        ErrorResponse response =
+                new ErrorResponse(
+                        ex.getMessage(),
+                        404,
+                        LocalDateTime.now()
+                );
+
+        return new ResponseEntity<>(
+                response,
+                HttpStatus.NOT_FOUND
+        );
+    }
+
+    @ExceptionHandler(BookCannotBeDeletedException.class)
+    public ResponseEntity<ErrorResponse> handleBookCannotBeDeleted(
+            BookCannotBeDeletedException ex){
+
+        ErrorResponse response =
+                new ErrorResponse(
+                        ex.getMessage(),
+                        400,
+                        LocalDateTime.now()
+                );
+
+        return new ResponseEntity<>(
+                response,
+                HttpStatus.BAD_REQUEST
+        );
+    }
 }

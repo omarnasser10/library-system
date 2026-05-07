@@ -1,0 +1,62 @@
+package com.library.controller;
+
+import com.library.dto.AddBookRequest;
+import com.library.dto.BookResponse;
+import com.library.model.Book;
+import com.library.service.BookService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/books")
+public class BookController {
+
+    private final BookService bookService;
+
+    public BookController(BookService bookService) {
+        this.bookService = bookService;
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping
+    public List<BookResponse> viewAllBooks() {
+        return bookService.viewAllBooks()
+                .stream()
+                .map(this::toResponse)
+                .toList();
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping
+    public ResponseEntity<BookResponse> addBook(
+            @Valid @RequestBody AddBookRequest request) {
+
+        Book book = bookService.addBook(request);
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(toResponse(book));
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteBook(@PathVariable Long id) {
+        bookService.deleteBook(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    private BookResponse toResponse(Book book) {
+        return new BookResponse(
+                book.getId(),
+                book.getTitle(),
+                book.getAuthor(),
+                book.getTotalCopies(),
+                book.getAvailableCopies()
+        );
+    }
+}

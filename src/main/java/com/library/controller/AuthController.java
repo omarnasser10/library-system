@@ -7,10 +7,9 @@ import com.library.dto.UserResponse;
 import com.library.model.User;
 import com.library.service.AuthService;
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
@@ -23,19 +22,29 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public UserResponse register(@Valid @RequestBody RegisterRequest request) {
+    public ResponseEntity<UserResponse> register(
+            @Valid @RequestBody RegisterRequest request) {
 
         User user = authService.registerNewUser(request);
 
-        return new UserResponse(
+        UserResponse response = new UserResponse(
                 user.getId(),
                 user.getName(),
                 user.getEmail()
         );
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(response);
     }
 
     @PostMapping("/login")
-    public LoginResponse login(@Valid @RequestBody LoginRequest request) {
-        return authService.login(request);
+    public ResponseEntity<LoginResponse> login(
+            @Valid @RequestBody LoginRequest request) {
+
+        LoginResponse response =
+                authService.login(request);
+
+        return ResponseEntity.ok(response);
     }
 }

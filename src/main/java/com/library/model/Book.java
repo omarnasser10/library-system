@@ -10,17 +10,12 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Book {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String title;
-
     private String author;
-
-    @Enumerated(EnumType.STRING)
-    private BookStatus  status;
-
-
+    private Integer totalCopies;
+    private Integer availableCopies;
+    private Boolean active;
 }
