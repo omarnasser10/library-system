@@ -6,6 +6,7 @@ import com.library.dto.RegisterRequest;
 import com.library.dto.UserResponse;
 import com.library.model.User;
 import com.library.service.AuthService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +23,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
+    @Valid
     public UserResponse register(@RequestBody RegisterRequest request) {
 
         User user = authService.registerNewUser(request);
@@ -34,6 +36,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
+    @Valid
     public LoginResponse login(@RequestBody LoginRequest request) {
         return authService.login(request);
     }

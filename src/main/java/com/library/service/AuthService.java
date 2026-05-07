@@ -3,6 +3,8 @@ package com.library.service;
 import com.library.dto.LoginRequest;
 import com.library.dto.LoginResponse;
 import com.library.dto.RegisterRequest;
+import com.library.exception.EmailAlreadyExistsException;
+import com.library.exception.InvalidCredentialsException;
 import com.library.model.Role;
 import com.library.model.User;
 import com.library.repository.UserRepository;
@@ -23,13 +25,10 @@ public class AuthService {
         this.jwt = jwt;
     }
 
-    public User registerNewUser(RegisterRequest request) {
-        if (request.getName() == null || request.getEmail() == null || request.getPassword() == null) {
-            throw new RuntimeException("Missing required fields");
-        }
 
+    public User registerNewUser(RegisterRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("Email already exists");
+            throw new EmailAlreadyExistsException("Email already exists");
         }
         String hashed_password=bcy.encode(request.getPassword());
 
@@ -44,13 +43,10 @@ public class AuthService {
     }
 
     public LoginResponse login(LoginRequest request){
-        if (request.getEmail() == null || request.getPassword() == null) {
-            throw new RuntimeException("Missing required fields");
-        }
         User user=userRepository.findByEmail(request.getEmail())
-                .orElseThrow(()-> new RuntimeException("User not found"));
+                .orElseThrow(()-> new InvalidCredentialsException("Invalid email or password"));
         if(!bcy.matches(request.getPassword(), user.getPassword()))
-            throw new RuntimeException("Invalid password");
+            throw new InvalidCredentialsException("Invalid email or password");
         return new LoginResponse(jwt.generateToken(user),user.getId(),user.getName(), user.getEmail(), user.getRole());
     }
 }
