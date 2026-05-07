@@ -29,7 +29,7 @@ public class GlobalExceptionHandler {
         ErrorResponse response=new ErrorResponse(ex.getMessage(),401, LocalDateTime.now());
         return new ResponseEntity<>(
                 response,
-                HttpStatus.CONFLICT
+                HttpStatus.UNAUTHORIZED
         );
     }
 }

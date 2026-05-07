@@ -23,8 +23,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    @Valid
-    public UserResponse register(@RequestBody RegisterRequest request) {
+    public UserResponse register(@Valid @RequestBody RegisterRequest request) {
 
         User user = authService.registerNewUser(request);
 
@@ -36,8 +35,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    @Valid
-    public LoginResponse login(@RequestBody LoginRequest request) {
+    public LoginResponse login(@Valid @RequestBody LoginRequest request) {
         return authService.login(request);
     }
 }
