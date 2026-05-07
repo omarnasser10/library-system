@@ -56,4 +56,22 @@ public class UserController {
     public void deleteUser(@PathVariable Long id){
         userService.deleteUser(id);
     }
+
+    @GetMapping("/me")
+    public UserResponse viewProfile() {
+
+        Long userId =
+                (Long) SecurityContextHolder
+                        .getContext()
+                        .getAuthentication()
+                        .getPrincipal();
+
+        User user = userService.viewProfile(userId);
+
+        return new UserResponse(
+                user.getId(),
+                user.getName(),
+                user.getEmail()
+        );
+    }
 }
