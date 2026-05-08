@@ -115,7 +115,6 @@ public class BookController {
                 book.getTotalCopies(),
                 book.getAvailableCopies(),
                 book.getCategory(),
-                book.getCoverImageUrl()
-        );
+                book.getCoverImageUrl());
     }
 }
