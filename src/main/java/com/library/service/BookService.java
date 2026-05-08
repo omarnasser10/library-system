@@ -39,6 +39,14 @@ public class BookService {
     }
 
     // ============================
+    // Get Book by ID
+    // ============================
+    public Book getBookById(Long id) {
+        return bookRepository.findById(id)
+                .orElseThrow(() -> new BookNotFoundException("Book not found"));
+    }
+
+    // ============================
     // Add New Book
     // ============================
     public Book addBook(AddBookRequest request) {
@@ -49,6 +57,7 @@ public class BookService {
         book.setAvailableCopies(request.getTotalCopies());
         book.setCategory(request.getCategory());
         book.setCoverImageUrl(request.getCoverImageUrl());
+        book.setPdfUrl(request.getPdfUrl());
         book.setActive(true);
         return bookRepository.save(book);
     }
@@ -80,6 +89,9 @@ public class BookService {
         }
         if (request.getCoverImageUrl() != null) {
             book.setCoverImageUrl(request.getCoverImageUrl());
+        }
+        if (request.getPdfUrl() != null) {
+            book.setPdfUrl(request.getPdfUrl());
         }
 
         return bookRepository.save(book);

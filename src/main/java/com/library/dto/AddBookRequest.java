@@ -15,15 +15,17 @@ public class AddBookRequest {
 
     private String category;
     private String coverImageUrl;
+    private String pdfUrl;
 
     public AddBookRequest() {}
 
-    public AddBookRequest(String title, String author, Integer totalCopies, String category, String coverImageUrl) {
+    public AddBookRequest(String title, String author, Integer totalCopies, String category, String coverImageUrl, String pdfUrl) {
         this.title = title;
         this.author = author;
         this.totalCopies = totalCopies;
         this.category = category;
         this.coverImageUrl = coverImageUrl;
+        this.pdfUrl = pdfUrl;
     }
 
     public String getTitle() { return title; }
@@ -40,4 +42,7 @@ public class AddBookRequest {
 
     public String getCoverImageUrl() { return coverImageUrl; }
     public void setCoverImageUrl(String coverImageUrl) { this.coverImageUrl = coverImageUrl; }
+
+    public String getPdfUrl() { return pdfUrl; }
+    public void setPdfUrl(String pdfUrl) { this.pdfUrl = pdfUrl; }
 }

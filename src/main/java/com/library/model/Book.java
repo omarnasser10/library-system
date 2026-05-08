@@ -19,5 +19,6 @@ public class Book {
     private Integer availableCopies;
     private String category;
     private String coverImageUrl;
+    private String pdfUrl;
     private Boolean active;
 }

@@ -27,15 +27,18 @@ public class Borrow {
 
     private LocalDate borrowDate;
 
+    private LocalDate dueDate;
+
     private LocalDate returnDate;
 
     @Enumerated(EnumType.STRING)
     private BorrowStatus status;
 
-    public Borrow(User user, Book book, LocalDate borrowDate, LocalDate returnDate, BorrowStatus status) {
+    public Borrow(User user, Book book, LocalDate borrowDate, LocalDate dueDate, LocalDate returnDate, BorrowStatus status) {
         this.user = user;
         this.book = book;
         this.borrowDate = borrowDate;
+        this.dueDate = dueDate;
         this.returnDate = returnDate;
         this.status = status;
     }

@@ -144,6 +144,7 @@ public class BorrowController {
                 borrow.getUser().getName(),
                 borrow.getUser().getEmail(),
                 borrow.getBorrowDate(),
+                borrow.getDueDate(),
                 borrow.getReturnDate(),
                 borrow.getStatus()
         );

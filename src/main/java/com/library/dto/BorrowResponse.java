@@ -12,11 +12,12 @@ public class BorrowResponse {
     private String userName;
     private String userEmail;
     private LocalDate borrowDate;
+    private LocalDate dueDate;
     private LocalDate returnDate;
     private BorrowStatus status;
 
     public BorrowResponse(Long id, Long bookId, String bookTitle, Long userId, String userName, String userEmail,
-                          LocalDate borrowDate, LocalDate returnDate, BorrowStatus status) {
+                          LocalDate borrowDate, LocalDate dueDate, LocalDate returnDate, BorrowStatus status) {
         this.id = id;
         this.bookId = bookId;
         this.bookTitle = bookTitle;
@@ -24,6 +25,7 @@ public class BorrowResponse {
         this.userName = userName;
         this.userEmail = userEmail;
         this.borrowDate = borrowDate;
+        this.dueDate = dueDate;
         this.returnDate = returnDate;
         this.status = status;
     }
@@ -54,6 +56,10 @@ public class BorrowResponse {
 
     public LocalDate getBorrowDate() {
         return borrowDate;
+    }
+
+    public LocalDate getDueDate() {
+        return dueDate;
     }
 
     public LocalDate getReturnDate() {

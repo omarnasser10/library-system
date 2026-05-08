@@ -12,6 +12,8 @@ import java.util.Optional;
 public interface BorrowRepository extends JpaRepository<Borrow, Long> {
 
     boolean existsByUserIdAndBookIdAndStatus(Long userId, Long bookId, BorrowStatus status);
+    
+    List<Borrow> findByStatusAndDueDateBefore(BorrowStatus status, java.time.LocalDate date);
 
     Optional<Borrow> findByUserIdAndBookIdAndStatus(Long userId, Long bookId, BorrowStatus status);
 

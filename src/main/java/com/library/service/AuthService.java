@@ -8,7 +8,6 @@ import com.library.exception.InvalidCredentialsException;
 import com.library.model.Role;
 import com.library.model.User;
 import com.library.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 

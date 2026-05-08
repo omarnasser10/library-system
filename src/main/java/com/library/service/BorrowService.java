@@ -64,6 +64,7 @@ public class BorrowService {
         borrow.setUser(user);
         borrow.setBook(book);
         borrow.setBorrowDate(LocalDate.now());
+        borrow.setDueDate(LocalDate.now().plusDays(14));
         borrow.setReturnDate(null);
         borrow.setStatus(BorrowStatus.BORROWED);
 
@@ -161,6 +162,13 @@ public class BorrowService {
         userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
         return borrowRepository.findAllByUserId(userId, pageable);
+    }
+
+    // ============================
+    // Helper: Check if active borrow exists
+    // ============================
+    public boolean hasActiveBorrow(Long userId, Long bookId) {
+        return borrowRepository.existsByUserIdAndBookIdAndStatus(userId, bookId, BorrowStatus.BORROWED);
     }
 
     // ============================

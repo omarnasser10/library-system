@@ -10,10 +10,17 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.core.io.Resource;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import com.library.service.FileStorageService;
+import com.library.service.BorrowService;
 
 import java.util.List;
 
@@ -22,9 +29,15 @@ import java.util.List;
 public class BookController {
 
     private final BookService bookService;
+    private final FileStorageService fileStorageService;
+    private final BorrowService borrowService;
 
-    public BookController(BookService bookService) {
+    public BookController(BookService bookService, 
+                          FileStorageService fileStorageService,
+                          BorrowService borrowService) {
         this.bookService = bookService;
+        this.fileStorageService = fileStorageService;
+        this.borrowService = borrowService;
     }
 
     // ======================================
@@ -105,6 +118,55 @@ public class BookController {
     }
 
     // ======================================
+    // POST /books/{id}/upload-pdf
+    // Upload PDF for a book — Admin only
+    // ======================================
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/{id}/upload-pdf")
+    public ResponseEntity<BookResponse> uploadBookPdf(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
+        Book book = bookService.getBookById(id);
+        
+        String fileName = fileStorageService.storeFile(file);
+                
+        UpdateBookRequest updateRequest = new UpdateBookRequest();
+        updateRequest.setPdfUrl(fileName);
+        
+        Book updatedBook = bookService.updateBook(id, updateRequest);
+        return ResponseEntity.ok(toResponse(updatedBook));
+    }
+
+    // ======================================
+    // GET /books/{id}/read
+    // Read the book's PDF — User must have borrowed it
+    // ======================================
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/{id}/read")
+    public ResponseEntity<Resource> readBook(@PathVariable Long id) {
+        Book book = bookService.getBookById(id);
+        
+        if (book.getPdfUrl() == null || book.getPdfUrl().isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        
+        Long userId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        
+        // Admin can read any book, User must have borrowed it
+        boolean isAdmin = SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+                
+        if (!isAdmin && !borrowService.hasActiveBorrow(userId, id)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        
+        Resource resource = fileStorageService.loadFileAsResource(book.getPdfUrl());
+        
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_PDF)
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
+    }
+
+    // ======================================
     // Helper: Book → BookResponse
     // ======================================
     private BookResponse toResponse(Book book) {
@@ -115,6 +177,7 @@ public class BookController {
                 book.getTotalCopies(),
                 book.getAvailableCopies(),
                 book.getCategory(),
-                book.getCoverImageUrl());
+                book.getCoverImageUrl(),
+                book.getPdfUrl());
     }
 }
