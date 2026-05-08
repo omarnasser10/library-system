@@ -12,6 +12,9 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     // For pagination
     Page<Book> findByActiveTrue(Pageable pageable);
 
+    // Count active books
+    long countByActiveTrue();
+
     // For search by title or author
     List<Book> findByActiveTrueAndTitleContainingIgnoreCaseOrActiveTrueAndAuthorContainingIgnoreCase(
             String title, String author

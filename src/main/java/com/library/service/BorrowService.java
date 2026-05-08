@@ -115,6 +115,31 @@ public class BorrowService {
     }
 
     // ============================
+    // Admin: Return a Book by Borrow ID
+    // ============================
+    @Transactional
+    public Borrow returnBorrowById(Long borrowId) {
+        Borrow borrow = borrowRepository.findById(borrowId)
+                .orElseThrow(() -> new RuntimeException("Borrow record not found"));
+
+        if (borrow.getStatus() == BorrowStatus.RETURNED) {
+            throw new BookAlreadyReturnedException("This book has already been returned");
+        }
+
+        borrow.setStatus(BorrowStatus.RETURNED);
+        borrow.setReturnDate(LocalDate.now());
+
+        Book book = borrow.getBook();
+        if (book.getAvailableCopies() == null) {
+            book.setAvailableCopies(0);
+        }
+        book.setAvailableCopies(book.getAvailableCopies() + 1);
+
+        bookRepository.save(book);
+        return borrowRepository.save(borrow);
+    }
+
+    // ============================
     // My Borrow History (current user)
     // ============================
     public List<Borrow> getMyBorrows(Long userId) {

@@ -9,16 +9,20 @@ public class BorrowResponse {
     private Long bookId;
     private String bookTitle;
     private Long userId;
+    private String userName;
+    private String userEmail;
     private LocalDate borrowDate;
     private LocalDate returnDate;
     private BorrowStatus status;
 
-    public BorrowResponse(Long id, Long bookId, String bookTitle, Long userId,
+    public BorrowResponse(Long id, Long bookId, String bookTitle, Long userId, String userName, String userEmail,
                           LocalDate borrowDate, LocalDate returnDate, BorrowStatus status) {
         this.id = id;
         this.bookId = bookId;
         this.bookTitle = bookTitle;
         this.userId = userId;
+        this.userName = userName;
+        this.userEmail = userEmail;
         this.borrowDate = borrowDate;
         this.returnDate = returnDate;
         this.status = status;
@@ -38,6 +42,14 @@ public class BorrowResponse {
 
     public Long getUserId() {
         return userId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
     }
 
     public LocalDate getBorrowDate() {

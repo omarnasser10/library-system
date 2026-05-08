@@ -54,6 +54,17 @@ public class BorrowController {
     }
 
     // ======================================
+    // POST /borrows/{borrowId}/admin-return
+    // Return a book by borrow ID — Admin only
+    // ======================================
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/{borrowId}/admin-return")
+    public ResponseEntity<BorrowResponse> adminReturnBook(@PathVariable Long borrowId) {
+        Borrow borrow = borrowService.returnBorrowById(borrowId);
+        return ResponseEntity.ok(toResponse(borrow));
+    }
+
+    // ======================================
     // GET /borrows/me
     // View my borrow history (authenticated user)
     // ======================================
@@ -130,6 +141,8 @@ public class BorrowController {
                 borrow.getBook().getId(),
                 borrow.getBook().getTitle(),
                 borrow.getUser().getId(),
+                borrow.getUser().getName(),
+                borrow.getUser().getEmail(),
                 borrow.getBorrowDate(),
                 borrow.getReturnDate(),
                 borrow.getStatus()

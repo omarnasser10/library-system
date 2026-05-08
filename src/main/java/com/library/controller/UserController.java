@@ -115,7 +115,8 @@ public class UserController {
         return new UserResponse(
                 user.getId(),
                 user.getName(),
-                user.getEmail()
+                user.getEmail(),
+                user.getRole() != null ? user.getRole().name() : null
         );
     }
 }

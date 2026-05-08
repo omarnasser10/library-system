@@ -30,8 +30,8 @@ public class AuthController {
         UserResponse response = new UserResponse(
                 user.getId(),
                 user.getName(),
-                user.getEmail()
-        );
+                user.getEmail(),
+                user.getRole() != null ? user.getRole().name() : null);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -42,8 +42,7 @@ public class AuthController {
     public ResponseEntity<LoginResponse> login(
             @Valid @RequestBody LoginRequest request) {
 
-        LoginResponse response =
-                authService.login(request);
+        LoginResponse response = authService.login(request);
 
         return ResponseEntity.ok(response);
     }

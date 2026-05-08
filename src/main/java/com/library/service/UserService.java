@@ -2,6 +2,7 @@ package com.library.service;
 
 import com.library.exception.EmailAlreadyExistsException;
 import com.library.exception.UserNotFoundException;
+import com.library.model.Role;
 import com.library.model.User;
 import com.library.repository.UserRepository;
 import org.springframework.data.domain.Page;
@@ -60,7 +61,7 @@ public class UserService {
     // Get All Users (with pagination)
     // ============================
     public Page<User> getAllUsers(Pageable pageable) {
-        return userRepository.findAll(pageable);
+        return userRepository.findByRoleNot(Role.ADMIN, pageable);
     }
 
     // ============================

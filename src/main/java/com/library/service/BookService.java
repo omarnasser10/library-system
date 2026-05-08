@@ -47,6 +47,8 @@ public class BookService {
         book.setAuthor(request.getAuthor());
         book.setTotalCopies(request.getTotalCopies());
         book.setAvailableCopies(request.getTotalCopies());
+        book.setCategory(request.getCategory());
+        book.setCoverImageUrl(request.getCoverImageUrl());
         book.setActive(true);
         return bookRepository.save(book);
     }
@@ -72,6 +74,12 @@ public class BookService {
             int diff = request.getTotalCopies() - book.getTotalCopies();
             book.setTotalCopies(request.getTotalCopies());
             book.setAvailableCopies(Math.max(0, book.getAvailableCopies() + diff));
+        }
+        if (request.getCategory() != null) {
+            book.setCategory(request.getCategory());
+        }
+        if (request.getCoverImageUrl() != null) {
+            book.setCoverImageUrl(request.getCoverImageUrl());
         }
 
         return bookRepository.save(book);

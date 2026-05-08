@@ -6,15 +6,19 @@ public class BookResponse {
     private String author;
     private Integer totalCopies;
     private Integer availableCopies;
+    private String category;
+    private String coverImageUrl;
 
     public BookResponse() {}
 
-    public BookResponse(Long id, String title, String author, Integer totalCopies, Integer availableCopies) {
+    public BookResponse(Long id, String title, String author, Integer totalCopies, Integer availableCopies, String category, String coverImageUrl) {
         this.id = id;
         this.title = title;
         this.author = author;
         this.totalCopies = totalCopies;
         this.availableCopies = availableCopies;
+        this.category = category;
+        this.coverImageUrl = coverImageUrl;
     }
 
     public Long getId() { return id; }
@@ -22,10 +26,14 @@ public class BookResponse {
     public String getAuthor() { return author; }
     public Integer getTotalCopies() { return totalCopies; }
     public Integer getAvailableCopies() { return availableCopies; }
+    public String getCategory() { return category; }
+    public String getCoverImageUrl() { return coverImageUrl; }
 
     public void setId(Long id) { this.id = id; }
     public void setTitle(String title) { this.title = title; }
     public void setAuthor(String author) { this.author = author; }
     public void setTotalCopies(Integer totalCopies) { this.totalCopies = totalCopies; }
     public void setAvailableCopies(Integer availableCopies) { this.availableCopies = availableCopies; }
+    public void setCategory(String category) { this.category = category; }
+    public void setCoverImageUrl(String coverImageUrl) { this.coverImageUrl = coverImageUrl; }
 }

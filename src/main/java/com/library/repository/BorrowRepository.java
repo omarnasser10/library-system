@@ -20,6 +20,9 @@ public interface BorrowRepository extends JpaRepository<Borrow, Long> {
     // Borrow history for a specific user (newest first)
     List<Borrow> findAllByUserIdOrderByBorrowDateDesc(Long userId);
 
+    // Count by status
+    long countByStatus(BorrowStatus status);
+
     // All borrows with pagination (for admin)
     Page<Borrow> findAll(Pageable pageable);
 

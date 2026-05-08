@@ -17,5 +17,7 @@ public class Book {
     private String author;
     private Integer totalCopies;
     private Integer availableCopies;
+    private String category;
+    private String coverImageUrl;
     private Boolean active;
 }
