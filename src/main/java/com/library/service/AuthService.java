@@ -18,7 +18,6 @@ public class AuthService {
     private final BCryptPasswordEncoder bcy;
     private final JwtService jwt;
 
-    @Autowired
     public AuthService(UserRepository userRepository, BCryptPasswordEncoder bcy, JwtService jwt) {
         this.userRepository = userRepository;
         this.bcy = bcy;

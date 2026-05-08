@@ -106,4 +106,53 @@ public class GlobalExceptionHandler {
                 HttpStatus.BAD_REQUEST
         );
     }
+    @ExceptionHandler(BookAlreadyBorrowedException.class)
+    public ResponseEntity<ErrorResponse> handleBookAlreadyBorrowed(
+            BookAlreadyBorrowedException ex){
+
+        ErrorResponse response =
+                new ErrorResponse(
+                        ex.getMessage(),
+                        400,
+                        LocalDateTime.now()
+                );
+
+        return new ResponseEntity<>(
+                response,
+                HttpStatus.BAD_REQUEST
+        );
+    }
+
+    @ExceptionHandler(BookAlreadyReturnedException.class)
+    public ResponseEntity<ErrorResponse> handleBookAlreadyReturned(
+            BookAlreadyReturnedException ex){
+
+        ErrorResponse response =
+                new ErrorResponse(
+                        ex.getMessage(),
+                        400,
+                        LocalDateTime.now()
+                );
+
+        return new ResponseEntity<>(
+                response,
+                HttpStatus.BAD_REQUEST
+        );
+    }
+    @ExceptionHandler(NoAvailableCopiesException.class)
+    public ResponseEntity<ErrorResponse> handleNoAvailableCopies(
+            NoAvailableCopiesException ex){
+
+        ErrorResponse response =
+                new ErrorResponse(
+                        ex.getMessage(),
+                        400,
+                        LocalDateTime.now()
+                );
+
+        return new ResponseEntity<>(
+                response,
+                HttpStatus.BAD_REQUEST
+        );
+    }
 }
