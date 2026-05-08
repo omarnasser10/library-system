@@ -20,5 +20,6 @@ public class Book {
     private String category;
     private String coverImageUrl;
     private String pdfUrl;
+
     private Boolean active;
 }

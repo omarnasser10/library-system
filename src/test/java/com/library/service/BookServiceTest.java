@@ -79,7 +79,7 @@ class BookServiceTest {
     // =============================================
     @Test
     void addBook_savesAndReturnsBook() {
-        AddBookRequest request = new AddBookRequest("Clean Code", "Robert Martin", 5, "Programming", "http://example.com/cover.jpg");
+        AddBookRequest request = new AddBookRequest("Clean Code", "Robert Martin", 5, "Programming", "http://example.com/cover.jpg", "http://example.com/book.pdf");
         when(bookRepository.save(any(Book.class))).thenReturn(activeBook);
 
         Book result = bookService.addBook(request);
@@ -94,7 +94,7 @@ class BookServiceTest {
     // =============================================
     @Test
     void updateBook_updatesTitle() {
-        UpdateBookRequest request = new UpdateBookRequest("New Title", null, null, null, null);
+        UpdateBookRequest request = new UpdateBookRequest("New Title", null, null, null, null, null);
         when(bookRepository.findById(1L)).thenReturn(Optional.of(activeBook));
         when(bookRepository.save(any(Book.class))).thenReturn(activeBook);
 

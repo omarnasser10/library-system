@@ -58,7 +58,7 @@ class BorrowServiceTest {
         when(borrowRepository.existsByUserIdAndBookIdAndStatus(1L, 10L, BorrowStatus.BORROWED))
                 .thenReturn(false);
 
-        Borrow savedBorrow = new Borrow(user, book, LocalDate.now(), null, BorrowStatus.BORROWED);
+        Borrow savedBorrow = new Borrow(user, book, LocalDate.now(), LocalDate.now().plusDays(14), null, BorrowStatus.BORROWED);
         when(borrowRepository.save(any(Borrow.class))).thenReturn(savedBorrow);
 
         Borrow result = borrowService.borrowBook(1L, 10L);
@@ -117,7 +117,7 @@ class BorrowServiceTest {
     void returnBook_success() {
         book.setAvailableCopies(2); // 1 copy is out
 
-        Borrow activeBorrow = new Borrow(user, book, LocalDate.now().minusDays(3), null, BorrowStatus.BORROWED);
+        Borrow activeBorrow = new Borrow(user, book, LocalDate.now().minusDays(3), LocalDate.now().plusDays(11), null, BorrowStatus.BORROWED);
         activeBorrow.setId(100L);
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
@@ -152,7 +152,7 @@ class BorrowServiceTest {
     // =============================================
     @Test
     void getMyBorrows_returnsUserHistory() {
-        Borrow b1 = new Borrow(user, book, LocalDate.now(), null, BorrowStatus.BORROWED);
+        Borrow b1 = new Borrow(user, book, LocalDate.now(), LocalDate.now().plusDays(14), null, BorrowStatus.BORROWED);
         when(borrowRepository.findAllByUserIdOrderByBorrowDateDesc(1L)).thenReturn(List.of(b1));
 
         List<Borrow> result = borrowService.getMyBorrows(1L);
@@ -166,7 +166,7 @@ class BorrowServiceTest {
     // =============================================
     @Test
     void getAllBorrows_returnsPagedResults() {
-        Borrow b1 = new Borrow(user, book, LocalDate.now(), null, BorrowStatus.BORROWED);
+        Borrow b1 = new Borrow(user, book, LocalDate.now(), LocalDate.now().plusDays(14), null, BorrowStatus.BORROWED);
         Pageable pageable = PageRequest.of(0, 10);
         Page<Borrow> page = new PageImpl<>(List.of(b1));
         when(borrowRepository.findAll(pageable)).thenReturn(page);
